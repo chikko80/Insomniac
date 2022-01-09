@@ -13,7 +13,7 @@ SLEEP_RANGE_BY_SPEED = {
     SPEED_GOOD: (1, 3),
     SPEED_BAD: (2, 5),
     SPEED_UGLY: (4, 8),
-    SPEED_ZERO: (7, 12)
+    SPEED_ZERO: (7, 12),
 }
 
 
@@ -37,7 +37,9 @@ class Sleeper:
         self.sleep_range_start = start1 + x * (start2 - start1)
         self.sleep_range_end = end1 + x * (end2 - end1)
 
-        print(f"Sleep range will be from {self.sleep_range_start:.2f} to {self.sleep_range_end:.2f} seconds")
+        print(
+            f"Sleep range will be from {self.sleep_range_start:.2f} to {self.sleep_range_end:.2f} seconds"
+        )
 
     def set_random_sleep_range(self, speed_1_to_4):
         if speed_1_to_4 == 1:
@@ -77,9 +79,15 @@ class Sleeper:
 
             self._set_random_sleep_range(speed, s1, s2)
         except Exception as ex:
-            print(COLOR_FAIL + "Got an error while trying to measure the internet speed" + COLOR_ENDC)
+            print(
+                COLOR_FAIL
+                + "Got an error while trying to measure the internet speed"
+                + COLOR_ENDC
+            )
             print(COLOR_FAIL + describe_exception(ex) + COLOR_ENDC)
-            print(f"Sleep range will remain as default to be from {self.sleep_range_start:.2f} to {self.sleep_range_end:.2f} seconds")
+            print(
+                f"Sleep range will remain as default to be from {self.sleep_range_start:.2f} to {self.sleep_range_end:.2f} seconds"
+            )
 
 
 def _get_internet_speed():
@@ -94,13 +102,19 @@ def _get_internet_speed():
         s.upload(threads=1)
         results_dict = s.results.dict()
     except Exception as ex:
-        print(COLOR_FAIL + "Failed to determine Internet speed, supposing it's zero" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + "Failed to determine Internet speed, supposing it's zero"
+            + COLOR_ENDC
+        )
         print(COLOR_FAIL + describe_exception(ex) + COLOR_ENDC)
         return SPEED_ZERO
 
-    download_speed = results_dict['download']
-    upload_speed = results_dict['upload']
-    print(f"Download speed {(download_speed / MEGABIT):.2f} Mbit/s, upload speed {(upload_speed / MEGABIT):.2f} Mbit/s")
+    download_speed = results_dict["download"]
+    upload_speed = results_dict["upload"]
+    print(
+        f"Download speed {(download_speed / MEGABIT):.2f} Mbit/s, upload speed {(upload_speed / MEGABIT):.2f} Mbit/s"
+    )
     return (download_speed + upload_speed) / 2
 
 

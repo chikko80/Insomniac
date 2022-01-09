@@ -25,16 +25,26 @@ class ActionRunnersManager(ABC):
                 selected_action_runners.append(action_runner)
 
         if len(selected_action_runners) == 0:
-            print_timeless(COLOR_FAIL + "You have to specify one of the actions: --interact, --unfollow" + COLOR_ENDC)
+            print_timeless(
+                COLOR_FAIL
+                + "You have to specify one of the actions: --interact, --unfollow"
+                + COLOR_ENDC
+            )
             return None
 
         if len(selected_action_runners) > 1:
-            print_timeless(COLOR_FAIL + "Executing two or more actions is not supported yet." + COLOR_ENDC)
+            print_timeless(
+                COLOR_FAIL
+                + "Executing two or more actions is not supported yet."
+                + COLOR_ENDC
+            )
             return None
 
-        print(COLOR_BOLD +
-              "Executing \"{0}\" action.".format(selected_action_runners[0].ACTION_ID) +
-              COLOR_ENDC)
+        print(
+            COLOR_BOLD
+            + 'Executing "{0}" action.'.format(selected_action_runners[0].ACTION_ID)
+            + COLOR_ENDC
+        )
 
         return selected_action_runners[0]
 

@@ -18,7 +18,11 @@ from insomniac.session_state import InsomniacSessionState
 from insomniac.sessions import Sessions
 from insomniac.sleeper import sleeper
 from insomniac.softban_indicator import ActionBlockedError
-from insomniac.storage import STORAGE_ARGS, InsomniacStorage, DatabaseMigrationFailedException
+from insomniac.storage import (
+    STORAGE_ARGS,
+    InsomniacStorage,
+    DatabaseMigrationFailedException,
+)
 from insomniac.utils import *
 from insomniac.views import UserSwitchFailedException
 
@@ -32,41 +36,41 @@ def get_insomniac_session(starter_conf_file_path):
 class Session(ABC):
     SESSION_ARGS = {
         "device": {
-            "help": 'device identifier. Should be used only when multiple devices are connected at once',
-            "metavar": '2443de990e017ece'
+            "help": "device identifier. Should be used only when multiple devices are connected at once",
+            "metavar": "2443de990e017ece",
         },
         "repeat": {
-            "help": 'repeat the same session again after N minutes after completion, disabled by default. '
-                    'It can be a number of minutes (e.g. 180) or a range (e.g. 120-180)',
-            "metavar": '120-180'
+            "help": "repeat the same session again after N minutes after completion, disabled by default. "
+            "It can be a number of minutes (e.g. 180) or a range (e.g. 120-180)",
+            "metavar": "120-180",
         },
         "no_typing": {
-            'help': 'disable "typing" feature (typing symbols one-by-one as a human)',
-            'action': 'store_true'
+            "help": 'disable "typing" feature (typing symbols one-by-one as a human)',
+            "action": "store_true",
         },
         "debug": {
-            'help': 'add this flag to run insomniac in debug mode (more verbose logs)',
-            'action': 'store_true'
+            "help": "add this flag to run insomniac in debug mode (more verbose logs)",
+            "action": "store_true",
         },
         "next_config_file": {
-            "help": 'configuration that will be loaded after session is finished and the bot \"sleeps\" for time '
-                    'specified by the \"--repeat\" argument. You can use this argument to run multiple Insomniac '
-                    'sessions one by one with different parameters. E.g. different action (interact and then unfollow),'
-                    ' or different \"--username\". By default uses the same config file as been loaded for the first '
-                    'session. Note that you must use \"--repeat\" with this argument!',
-            "metavar": 'CONFIG_FILE',
-            "default": None
+            "help": 'configuration that will be loaded after session is finished and the bot "sleeps" for time '
+            'specified by the "--repeat" argument. You can use this argument to run multiple Insomniac '
+            "sessions one by one with different parameters. E.g. different action (interact and then unfollow),"
+            ' or different "--username". By default uses the same config file as been loaded for the first '
+            'session. Note that you must use "--repeat" with this argument!',
+            "metavar": "CONFIG_FILE",
+            "default": None,
         },
         "speed": {
-            'help': 'manually specify the speed setting, from 1 (slowest) to 4 (fastest)',
-            'metavar': '1-4',
-            'type': int,
-            'choices': range(1, 5)
+            "help": "manually specify the speed setting, from 1 (slowest) to 4 (fastest)",
+            "metavar": "1-4",
+            "type": int,
+            "choices": range(1, 5),
         },
         "no_speed_check": {
-            'help': 'skip internet speed check at start',
-            'action': 'store_true'
-        }
+            "help": "skip internet speed check at start",
+            "action": "store_true",
+        },
     }
 
     device = None
@@ -93,7 +97,9 @@ class Session(ABC):
         self.reset_params()
 
         if args.repeat is not None:
-            self.repeat = get_float_value(args.repeat, "Sleep time (min) before repeat: {:.2f}", 180.0)
+            self.repeat = get_float_value(
+                args.repeat, "Sleep time (min) before repeat: {:.2f}", 180.0
+            )
 
         if args.debug is not None and bool(args.debug):
             __version__.__debug_mode__ = True
@@ -128,8 +134,16 @@ class Session(ABC):
         if args.speed is not None:
             sleeper.set_random_sleep_range(int(args.speed))
         elif not args.no_speed_check:
-            print("Checking your Internet speed to adjust the script speed, please wait for a minute...")
-            print("(use " + COLOR_BOLD + "--no-speed-check" + COLOR_ENDC + " to skip this check)")
+            print(
+                "Checking your Internet speed to adjust the script speed, please wait for a minute..."
+            )
+            print(
+                "(use "
+                + COLOR_BOLD
+                + "--no-speed-check"
+                + COLOR_ENDC
+                + " to skip this check)"
+            )
             sleeper.update_random_sleep_range()
 
     @staticmethod
@@ -154,45 +168,43 @@ class Session(ABC):
 class InsomniacSession(Session):
     INSOMNIAC_SESSION_ARGS = {
         "wait_for_device": {
-            'help': 'keep waiting for ADB-device to be ready for connection (if no device-id is provided using '
-                    '--device flag, will wait for any available device)',
-            'action': 'store_true',
-            "default": False
+            "help": "keep waiting for ADB-device to be ready for connection (if no device-id is provided using "
+            "--device flag, will wait for any available device)",
+            "action": "store_true",
+            "default": False,
         },
         "app_id": {
-            "help": 'apk package identifier. Should be used only if you are using cloned-app. '
-                    'Using \'com.instagram.android\' by default',
-            "metavar": 'com.instagram.android',
-            "default": 'com.instagram.android'
+            "help": "apk package identifier. Should be used only if you are using cloned-app. "
+            "Using 'com.instagram.android' by default",
+            "metavar": "com.instagram.android",
+            "default": "com.instagram.android",
         },
-        "app_name": {
-            "default": None
-        },
+        "app_name": {"default": None},
         "old": {
-            'help': 'add this flag to use an old version of uiautomator. Use it only if you experience '
-                    'problems with the default version',
-            'action': 'store_true'
+            "help": "add this flag to use an old version of uiautomator. Use it only if you experience "
+            "problems with the default version",
+            "action": "store_true",
         },
         "dont_indicate_softban": {
             "help": "by default Insomniac tries to indicate if there is a softban on your acoount. Set this flag in "
-                    "order to ignore those softban indicators",
-            'action': 'store_true',
-            "default": False
+            "order to ignore those softban indicators",
+            "action": "store_true",
+            "default": False,
         },
         "dont_validate_profile_existence": {
             "help": "by default, when interacting with targets, Insomniac tries to indicate if the instagram-profile "
-                    "you are trying to interact-with truly exists. Set this flag in order to ignore those "
-                    "existence-indicators",
-            'action': 'store_true',
-            "default": False
+            "you are trying to interact-with truly exists. Set this flag in order to ignore those "
+            "existence-indicators",
+            "action": "store_true",
+            "default": False,
         },
         "username": {
-            "help": 'if you have configured multiple Instagram accounts in your app, use this parameter in order to '
-                    'switch into a specific one. Not trying to switch account by default. '
-                    'If the account does not exist - the session won\'t start',
-            "metavar": 'my_account_name',
-            "default": None
-        }
+            "help": "if you have configured multiple Instagram accounts in your app, use this parameter in order to "
+            "switch into a specific one. Not trying to switch account by default. "
+            "If the account does not exist - the session won't start",
+            "metavar": "my_account_name",
+            "default": None,
+        },
     }
 
     username = None
@@ -233,18 +245,29 @@ class InsomniacSession(Session):
             self.username = args.username
 
     def get_device_wrapper(self, args):
-        device_wrapper = DeviceWrapper(args.device, args.old, args.wait_for_device, args.app_id, args.app_name, args.no_typing)
+        device_wrapper = DeviceWrapper(
+            args.device,
+            args.old,
+            args.wait_for_device,
+            args.app_id,
+            args.app_name,
+            args.no_typing,
+        )
         device = device_wrapper.get()
         if device is None:
             return None, None
 
-        app_version = get_instagram_version(device_wrapper.device_id, device_wrapper.app_id)
+        app_version = get_instagram_version(
+            device_wrapper.device_id, device_wrapper.app_id
+        )
         print("Instagram version: " + app_version)
         self.verify_instagram_version(app_version)
 
         return device_wrapper, app_version
 
-    def prepare_session_state(self, args, device_wrapper, app_version, save_profile_info=True):
+    def prepare_session_state(
+        self, args, device_wrapper, app_version, save_profile_info=True
+    ):
         self.session_state = InsomniacSessionState()
         self.session_state.args = args.__dict__
         self.session_state.app_id = args.app_id
@@ -254,7 +277,13 @@ class InsomniacSession(Session):
         device = device_wrapper.get()
         device.wake_up()
 
-        print_timeless(COLOR_REPORT + "\n-------- START: " + str(self.session_state.startTime) + " --------" + COLOR_ENDC)
+        print_timeless(
+            COLOR_REPORT
+            + "\n-------- START: "
+            + str(self.session_state.startTime)
+            + " --------"
+            + COLOR_ENDC
+        )
 
         if __version__.__debug_mode__:
             device.start_screen_record()
@@ -262,9 +291,11 @@ class InsomniacSession(Session):
             # IG was just opened, check that we are not hard banned
             hardban_indicator.detect_webview(device)
         if save_profile_info:
-            self.session_state.my_username, \
-                self.session_state.my_followers_count, \
-                self.session_state.my_following_count = get_my_profile_info(device, self.username)
+            (
+                self.session_state.my_username,
+                self.session_state.my_followers_count,
+                self.session_state.my_following_count,
+            ) = get_my_profile_info(device, self.username)
 
         return self.session_state
 
@@ -275,7 +306,13 @@ class InsomniacSession(Session):
             device_wrapper.get().stop_screen_record()
         print_copyright()
         self.session_state.end_session()
-        print_timeless(COLOR_REPORT + "-------- FINISH: " + str(self.session_state.finishTime) + " --------" + COLOR_ENDC)
+        print_timeless(
+            COLOR_REPORT
+            + "-------- FINISH: "
+            + str(self.session_state.finishTime)
+            + " --------"
+            + COLOR_ENDC
+        )
 
         print_full_report(self.sessions)
         print_timeless("")
@@ -310,19 +347,27 @@ class InsomniacSession(Session):
             self.limits_mgr.set_limits(args)
 
             try:
-                self.prepare_session_state(args, device_wrapper, app_version, save_profile_info=True)
+                self.prepare_session_state(
+                    args, device_wrapper, app_version, save_profile_info=True
+                )
                 migrate_from_json_to_sql(self.session_state.my_username)
                 migrate_from_sql_to_peewee(self.session_state.my_username)
                 self.storage = InsomniacStorage(self.session_state.my_username, args)
                 self.session_state.set_storage_layer(self.storage)
                 self.session_state.start_session()
 
-                action_runner.run(device_wrapper,
-                                  self.storage,
-                                  self.session_state,
-                                  self.on_action_callback,
-                                  self.limits_mgr.is_limit_reached_for_action)
-            except (KeyboardInterrupt, UserSwitchFailedException, DatabaseMigrationFailedException):
+                action_runner.run(
+                    device_wrapper,
+                    self.storage,
+                    self.session_state,
+                    self.on_action_callback,
+                    self.limits_mgr.is_limit_reached_for_action,
+                )
+            except (
+                KeyboardInterrupt,
+                UserSwitchFailedException,
+                DatabaseMigrationFailedException,
+            ):
                 self.end_session(device_wrapper)
                 return
             except (ActionBlockedError, HardBanError) as ex:
@@ -333,7 +378,11 @@ class InsomniacSession(Session):
                     InsomniacStorage.log_hardban(args.app_name)
 
                 print_timeless("")
-                print(COLOR_FAIL + describe_exception(ex, with_stacktrace=False) + COLOR_ENDC)
+                print(
+                    COLOR_FAIL
+                    + describe_exception(ex, with_stacktrace=False)
+                    + COLOR_ENDC
+                )
                 save_crash(device_wrapper.get())
                 if self.next_config_file is None:
                     self.end_session(device_wrapper)
@@ -345,7 +394,12 @@ class InsomniacSession(Session):
                     print(COLOR_FAIL + describe_exception(ex) + COLOR_ENDC)
                     save_crash(device_wrapper.get(), ex)
 
-            self.end_session(device_wrapper, with_app_closing=self.should_close_app_after_session(args, device_wrapper))
+            self.end_session(
+                device_wrapper,
+                with_app_closing=self.should_close_app_after_session(
+                    args, device_wrapper
+                ),
+            )
             if self.repeat is not None:
                 if not self.repeat_session(args):
                     break
@@ -354,24 +408,39 @@ class InsomniacSession(Session):
 
     @staticmethod
     def verify_instagram_version(installed_ig_version):
-        code, body, _ = network.get(f"https://insomniac-bot.com/get_latest_supported_ig_version/")
+        code, body, _ = network.get(
+            f"https://insomniac-bot.com/get_latest_supported_ig_version/"
+        )
         if code == HTTP_OK and body is not None:
             json_config = json.loads(body)
-            latest_supported_ig_version = json_config['message']
+            latest_supported_ig_version = json_config["message"]
         else:
             return
 
         try:
-            is_ok = versiontuple(installed_ig_version) <= versiontuple(latest_supported_ig_version)
+            is_ok = versiontuple(installed_ig_version) <= versiontuple(
+                latest_supported_ig_version
+            )
         except ValueError:
             print_debug(COLOR_FAIL + "Cannot compare IG versions" + COLOR_ENDC)
             return
 
         if not is_ok:
             print_timeless("")
-            print_timeless(COLOR_FAIL + f"IG version ({installed_ig_version}) is newer than "
-                                        f"latest supported ({latest_supported_ig_version})." + COLOR_ENDC)
+            print_timeless(
+                COLOR_FAIL + f"IG version ({installed_ig_version}) is newer than "
+                f"latest supported ({latest_supported_ig_version})." + COLOR_ENDC
+            )
             if insomniac_globals.is_insomniac():
-                print_timeless(COLOR_FAIL + "Please uninstall IG and download recommended apk from here:" + COLOR_ENDC)
-                print_timeless(COLOR_FAIL + COLOR_BOLD + "https://insomniac-bot.com/get_latest_supported_ig_apk/" + COLOR_ENDC)
+                print_timeless(
+                    COLOR_FAIL
+                    + "Please uninstall IG and download recommended apk from here:"
+                    + COLOR_ENDC
+                )
+                print_timeless(
+                    COLOR_FAIL
+                    + COLOR_BOLD
+                    + "https://insomniac-bot.com/get_latest_supported_ig_apk/"
+                    + COLOR_ENDC
+                )
             print_timeless("")

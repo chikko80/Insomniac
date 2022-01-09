@@ -7,7 +7,15 @@ from insomniac.utils import *
 class DeviceWrapper(object):
     device = None
 
-    def __init__(self, device_id, old_uiautomator, wait_for_device, app_id, app_name, dont_set_typewriter):
+    def __init__(
+        self,
+        device_id,
+        old_uiautomator,
+        wait_for_device,
+        app_id,
+        app_name,
+        dont_set_typewriter,
+    ):
         self.device_id = device_id
         self.app_id = resolve_app_id(app_id, device_id, app_name)
         self.app_name = app_name
@@ -19,14 +27,18 @@ class DeviceWrapper(object):
         return self.device
 
     def create(self, wait_for_device, dont_set_typewriter):
-        if not check_adb_connection(device_id=self.device_id, wait_for_device=wait_for_device):
+        if not check_adb_connection(
+            device_id=self.device_id, wait_for_device=wait_for_device
+        ):
             return None
 
         typewriter = Typewriter(self.device_id)
         if not dont_set_typewriter:
             typewriter.set_adb_keyboard()
 
-        device = create_device(self.old_uiautomator, self.device_id, self.app_id, typewriter)
+        device = create_device(
+            self.old_uiautomator, self.device_id, self.app_id, typewriter
+        )
         if device is None:
             return None
 

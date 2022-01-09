@@ -1,6 +1,7 @@
 [< Back to the documentation](/#)
 
 ## How to update?
+
 Depends on the way you've installed Insomniac.
 
 **1. Installed via _pip_ (`python3 -m pip install insomniac`) => just run `python3 -m pip install --upgrade insomniac`**
@@ -11,7 +12,7 @@ _Doesn't work for you? If it fails during the update, check that you have the la
 
 **3. Installed via manual code download => delete folder with the source code and download the latest release from https://github.com/alexal1/Insomniac/releases**
 
-_Note that you may want to keep all data the bot saved for you (such as usernames it followed, scraped users, etc.). Then just copy "insomniac.db" file to another place before deleting the folder and then put it back._ 
+_Note that you may want to keep all data the bot saved for you (such as usernames it followed, scraped users, etc.). Then just copy "insomniac.db" file to another place before deleting the folder and then put it back._
 
 ### How to get a specific version?
 

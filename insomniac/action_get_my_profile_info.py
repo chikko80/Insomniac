@@ -13,14 +13,20 @@ def get_my_profile_info(device, username):
 
         if username is not None:
             if not profile_view.change_to_username(username):
-                print(COLOR_FAIL + f"Couldn't switch user to {username}, abort!" + COLOR_ENDC)
+                print(
+                    COLOR_FAIL
+                    + f"Couldn't switch user to {username}, abort!"
+                    + COLOR_ENDC
+                )
                 device.back()
                 raise UserSwitchFailedException()
 
         print("Refreshing your profile status...")
         profile_view.refresh()
         sleeper.random_sleep()
-        username, followers, following = profile_view.get_profile_info(swipe_up_if_needed=True)
+        username, followers, following = profile_view.get_profile_info(
+            swipe_up_if_needed=True
+        )
     except UserSwitchFailedException as e:
         raise e
     except Exception as e:
@@ -36,14 +42,20 @@ def get_my_profile_info(device, username):
 
         if username is not None:
             if not profile_view.change_to_username(username):
-                print(COLOR_FAIL + f"Couldn't switch user to {username}, abort!" + COLOR_ENDC)
+                print(
+                    COLOR_FAIL
+                    + f"Couldn't switch user to {username}, abort!"
+                    + COLOR_ENDC
+                )
                 device.back()
                 raise UserSwitchFailedException()
 
         print("Refreshing your profile status...")
         profile_view.refresh()
         sleeper.random_sleep()
-        username, followers, following = profile_view.get_profile_info(swipe_up_if_needed=True)
+        username, followers, following = profile_view.get_profile_info(
+            swipe_up_if_needed=True
+        )
 
     report_string = ""
     if username:

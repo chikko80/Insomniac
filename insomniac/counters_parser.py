@@ -7,7 +7,7 @@ def parse(text) -> int:
     multiplier = 1
     text = text.replace(",", "")
     is_dot_in_text = False
-    if '.' in text:
+    if "." in text:
         text = text.replace(".", "")
         is_dot_in_text = True
     if "K" in text:

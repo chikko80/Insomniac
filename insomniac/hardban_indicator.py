@@ -7,7 +7,7 @@ class HardBanError(Exception):
 
 class HardBanIndicator:
 
-    WEBVIEW_ACTIVITY_NAME = 'com.instagram.simplewebview.SimpleWebViewActivity'
+    WEBVIEW_ACTIVITY_NAME = "com.instagram.simplewebview.SimpleWebViewActivity"
 
     def detect_webview(self, device):
         """
@@ -16,16 +16,26 @@ class HardBanIndicator:
         """
         device_id = device.device_id
         app_id = device.app_id
-        resumed_activity_output = execute_command("adb" + ("" if device_id is None else " -s " + device_id) +
-                                                  f" shell dumpsys activity | grep 'mResumedActivity'")
+        resumed_activity_output = execute_command(
+            "adb"
+            + ("" if device_id is None else " -s " + device_id)
+            + f" shell dumpsys activity | grep 'mResumedActivity'"
+        )
 
         max_attempts = 3
         attempt = 1
         while attempt <= max_attempts:
             sleep(1)
             full_webview_activity_name = f"{app_id}/{self.WEBVIEW_ACTIVITY_NAME}"
-            if resumed_activity_output is not None and full_webview_activity_name in resumed_activity_output:
-                print(COLOR_FAIL + "WebView is shown. Counting that as a hard-ban indicator!" + COLOR_ENDC)
+            if (
+                resumed_activity_output is not None
+                and full_webview_activity_name in resumed_activity_output
+            ):
+                print(
+                    COLOR_FAIL
+                    + "WebView is shown. Counting that as a hard-ban indicator!"
+                    + COLOR_ENDC
+                )
                 self.indicate_ban()
                 return
             attempt += 1

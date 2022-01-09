@@ -7,24 +7,43 @@ from insomniac.actions_providers import Provider
 from insomniac.utils import *
 
 DB_NAME = "interaction_data.db"
-DB_VERSIONS = {'3.5.0': 1,
-               '3.5.18': 2}
+DB_VERSIONS = {"3.5.0": 1, "3.5.18": 2}
 
 SQL_SELECT_FROM_METADATA = "SELECT * from metadata"
 SQL_SELECT_MAX_VERSION_FROM_METADATA = "SELECT MAX(version) from metadata"
-SQL_SELECT_FROM_FOLLOW_STATUS_BY_USERNAME = "SELECT * from users_follow_status WHERE username = :username"
-SQL_SELECT_FROM_INTERACTED_USERS_BY_USERNAME = "SELECT * from interacted_users WHERE username = :username"
-SQL_SELECT_TARGETS_FROM_INTERACTED_USERS = "SELECT * from interacted_users WHERE " \
-                                           "provider = 'TARGETS_LIST' OR provider = 'SCRAPING'"
-SQL_COUNT_LOADED_TARGETS_FROM_INTERACTED_USERS_BY_SCRAPE = "SELECT COUNT(*) from interacted_users WHERE provider = 'SCRAPING'"
-SQL_COUNT_LOADED_TARGETS_FROM_INTERACTED_USERS_BY_TARGETS_LIST = "SELECT COUNT(*) from interacted_users WHERE provider = 'TARGETS_LIST'"
-SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_SCRAPE = "SELECT COUNT(*) from interacted_users WHERE " \
-                                                                          "provider = 'SCRAPING' AND interactions_count = 0"
-SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_TARGETS_LIST = "SELECT COUNT(*) from interacted_users WHERE " \
-                                                                                "provider = 'TARGETS_LIST' AND interactions_count = 0"
-SQL_SELECT_FROM_FILTERED_USERS_BY_USERNAME = "SELECT * from filtered_users WHERE username = :username"
-SQL_SELECT_FROM_SCRAPED_USERS_BY_USERNAME = "SELECT * from scraped_users WHERE username = :username"
-SQL_SELECT_ALL_SESSIONS = "SELECT * from sessions INNER JOIN profiles ON sessions.profile_id = profiles.id"
+SQL_SELECT_FROM_FOLLOW_STATUS_BY_USERNAME = (
+    "SELECT * from users_follow_status WHERE username = :username"
+)
+SQL_SELECT_FROM_INTERACTED_USERS_BY_USERNAME = (
+    "SELECT * from interacted_users WHERE username = :username"
+)
+SQL_SELECT_TARGETS_FROM_INTERACTED_USERS = (
+    "SELECT * from interacted_users WHERE "
+    "provider = 'TARGETS_LIST' OR provider = 'SCRAPING'"
+)
+SQL_COUNT_LOADED_TARGETS_FROM_INTERACTED_USERS_BY_SCRAPE = (
+    "SELECT COUNT(*) from interacted_users WHERE provider = 'SCRAPING'"
+)
+SQL_COUNT_LOADED_TARGETS_FROM_INTERACTED_USERS_BY_TARGETS_LIST = (
+    "SELECT COUNT(*) from interacted_users WHERE provider = 'TARGETS_LIST'"
+)
+SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_SCRAPE = (
+    "SELECT COUNT(*) from interacted_users WHERE "
+    "provider = 'SCRAPING' AND interactions_count = 0"
+)
+SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_TARGETS_LIST = (
+    "SELECT COUNT(*) from interacted_users WHERE "
+    "provider = 'TARGETS_LIST' AND interactions_count = 0"
+)
+SQL_SELECT_FROM_FILTERED_USERS_BY_USERNAME = (
+    "SELECT * from filtered_users WHERE username = :username"
+)
+SQL_SELECT_FROM_SCRAPED_USERS_BY_USERNAME = (
+    "SELECT * from scraped_users WHERE username = :username"
+)
+SQL_SELECT_ALL_SESSIONS = (
+    "SELECT * from sessions INNER JOIN profiles ON sessions.profile_id = profiles.id"
+)
 SQL_SELECT_ALL_INTERACTED_USERS = "SELECT * from interacted_users"
 SQL_SELECT_ALL_FILTERED_USERS = "SELECT * from filtered_users"
 SQL_SELECT_ALL_SCRAPED_USERS = "SELECT * from scraped_users"
@@ -32,10 +51,16 @@ SQL_SELECT_PROFILE_BY_ID = "SELECT * from profiles WHERE id = :profile_id"
 
 SQL_INSERT_DEFAULT_INTO_METADATA = "INSERT INTO metadata DEFAULT VALUES"
 SQL_INSERT_INTO_METADATA = "INSERT INTO metadata (version) VALUES (?)"
-SQL_INSERT_INTO_INTERACTED_USERS = "INSERT INTO interacted_users (username, last_interaction, " \
-                                   "source, interaction_type, provider) VALUES (?, ?, ?, ?, ?)"
-SQL_INSERT_INTO_FILTERED_USERS = "INSERT INTO filtered_users (username, filtered_at) VALUES (?, ?)"
-SQL_INSERT_INTO_SCRAPED_USERS = "INSERT INTO scraped_users (username, last_interaction) VALUES (?, ?)"
+SQL_INSERT_INTO_INTERACTED_USERS = (
+    "INSERT INTO interacted_users (username, last_interaction, "
+    "source, interaction_type, provider) VALUES (?, ?, ?, ?, ?)"
+)
+SQL_INSERT_INTO_FILTERED_USERS = (
+    "INSERT INTO filtered_users (username, filtered_at) VALUES (?, ?)"
+)
+SQL_INSERT_INTO_SCRAPED_USERS = (
+    "INSERT INTO scraped_users (username, last_interaction) VALUES (?, ?)"
+)
 SQL_INSERT_INTO_PROFILES = "INSERT INTO profiles (followers, following) VALUES (?, ?)"
 SQL_INSERT_INTO_SESSIONS = """
     INSERT INTO sessions (
@@ -54,18 +79,28 @@ SQL_INSERT_INTO_SESSIONS = """
         args,
         profile_id
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
-SQL_INSERT_INTO_FOLLOW_STATUS = "INSERT INTO users_follow_status (username, is_follow_me, " \
-                                   "do_i_follow_him, updated_at) VALUES (?, ?, ?, ?)"
+SQL_INSERT_INTO_FOLLOW_STATUS = (
+    "INSERT INTO users_follow_status (username, is_follow_me, "
+    "do_i_follow_him, updated_at) VALUES (?, ?, ?, ?)"
+)
 
 SQL_DELETE_FROM_TARGETS_BY_USERNAME = "DELETE from targets WHERE username = :username"
 
-SQL_UPDATE_INTERACTED_USER = "UPDATE interacted_users set following_status = ?, last_interaction = ?, " \
-                             "interactions_count = ?, source = ?, interaction_type = ?, provider = ? where username = ?"
-SQL_UPDATE_INTERACTED_USER_INTERACTIONS_COUNT = "UPDATE interacted_users set interactions_count = ? where username = ?"
-SQL_UPDATE_FILTERED_USER = "UPDATE filtered_users set filtered_at = ? where username = ?"
+SQL_UPDATE_INTERACTED_USER = (
+    "UPDATE interacted_users set following_status = ?, last_interaction = ?, "
+    "interactions_count = ?, source = ?, interaction_type = ?, provider = ? where username = ?"
+)
+SQL_UPDATE_INTERACTED_USER_INTERACTIONS_COUNT = (
+    "UPDATE interacted_users set interactions_count = ? where username = ?"
+)
+SQL_UPDATE_FILTERED_USER = (
+    "UPDATE filtered_users set filtered_at = ? where username = ?"
+)
 SQL_UPDATE_SCRAPED_USER = "UPDATE scraped_users set scraping_status = ?, last_interaction = ? where username = ?"
-SQL_UPDATE_FOLLOW_STATUS = "UPDATE users_follow_status set is_follow_me = ?, do_i_follow_him = ?, " \
-                           "updated_at = ? where username = ?"
+SQL_UPDATE_FOLLOW_STATUS = (
+    "UPDATE users_follow_status set is_follow_me = ?, do_i_follow_him = ?, "
+    "updated_at = ? where username = ?"
+)
 
 SQL_CREATE_METADATA_TABLE = f"""
     CREATE TABLE IF NOT EXISTS `metadata` (
@@ -151,7 +186,11 @@ def migrate_database_if_needed(address):
     except DatabaseMigrationFailedException as e:
         raise e
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot create/open database at {address}: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Cannot create/open database at {address}: {e}"
+            + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -175,13 +214,17 @@ def create_database(address):
                     "profiles",
                     "sessions",
                     "targets",
-                    "users_follow_status"
-                ]
+                    "users_follow_status",
+                ],
             )
             cursor.execute(SQL_INSERT_DEFAULT_INTO_METADATA)
             connection.commit()
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot create/open database at {address}: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Cannot create/open database at {address}: {e}"
+            + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -226,7 +269,11 @@ def get_interacted_user(address, username):
         cursor = connection.cursor()
         interacted_user = _select_interacted_user_by_username(cursor, username)
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot get interacted user {username}: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Cannot get interacted user {username}: {e}"
+            + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -245,7 +292,9 @@ def get_all_interacted_users(address):
         cursor.execute(SQL_SELECT_ALL_INTERACTED_USERS)
         interacted_users = cursor.fetchall()
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot get all interacted users: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL + f"[Database] Cannot get all interacted users: {e}" + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -254,13 +303,15 @@ def get_all_interacted_users(address):
     return list(interacted_users) if interacted_users is not None else ()
 
 
-def update_interacted_users(address,
-                            usernames,
-                            last_interactions,
-                            following_statuses,
-                            sources,
-                            interaction_types,
-                            providers):
+def update_interacted_users(
+    address,
+    usernames,
+    last_interactions,
+    following_statuses,
+    sources,
+    interaction_types,
+    providers,
+):
     connection = None
     try:
         connection = sqlite3.connect(address)
@@ -275,22 +326,53 @@ def update_interacted_users(address,
 
             interacted_user = _select_interacted_user_by_username(cursor, username)
             if interacted_user is None:
-                cursor.execute(SQL_INSERT_INTO_INTERACTED_USERS, (username, last_interaction, source, interaction_type, provider.name))
+                cursor.execute(
+                    SQL_INSERT_INTO_INTERACTED_USERS,
+                    (
+                        username,
+                        last_interaction,
+                        source,
+                        interaction_type,
+                        provider.name,
+                    ),
+                )
             cursor.execute(
                 SQL_UPDATE_INTERACTED_USER,
                 (
                     following_status.name,
                     last_interaction,
-                    interacted_user["interactions_count"] + 1 if interacted_user is not None else 1,
-                    source if source is not None else (interacted_user["source"] if interacted_user is not None else None),
-                    interaction_type if interaction_type is not None else (interacted_user["interaction_type"] if interacted_user is not None else None),
-                    provider.name if provider is not None else (interacted_user["provider"] if interacted_user is not None else Provider.UNKNOWN),
-                    username
-                )
+                    interacted_user["interactions_count"] + 1
+                    if interacted_user is not None
+                    else 1,
+                    source
+                    if source is not None
+                    else (
+                        interacted_user["source"]
+                        if interacted_user is not None
+                        else None
+                    ),
+                    interaction_type
+                    if interaction_type is not None
+                    else (
+                        interacted_user["interaction_type"]
+                        if interacted_user is not None
+                        else None
+                    ),
+                    provider.name
+                    if provider is not None
+                    else (
+                        interacted_user["provider"]
+                        if interacted_user is not None
+                        else Provider.UNKNOWN
+                    ),
+                    username,
+                ),
             )
         connection.commit()
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot update interacted users: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL + f"[Database] Cannot update interacted users: {e}" + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -306,7 +388,11 @@ def get_user_follow_status(address, username):
         cursor = connection.cursor()
         follow_status = _select_follow_status_by_username(cursor, username)
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot get user's follow status of {username}: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Cannot get user's follow status of {username}: {e}"
+            + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -315,11 +401,9 @@ def get_user_follow_status(address, username):
     return dict(follow_status) if follow_status is not None else None
 
 
-def update_user_follow_status(address,
-                              username,
-                              is_follow_me,
-                              do_i_follow_him,
-                              updated_at):
+def update_user_follow_status(
+    address, username, is_follow_me, do_i_follow_him, updated_at
+):
     connection = None
     try:
         connection = sqlite3.connect(address)
@@ -327,19 +411,26 @@ def update_user_follow_status(address,
         cursor = connection.cursor()
         interacted_user = _select_follow_status_by_username(cursor, username)
         if interacted_user is None:
-            cursor.execute(SQL_INSERT_INTO_FOLLOW_STATUS, (username, 'UNKNOWN', 'UNKNOWN', updated_at))
+            cursor.execute(
+                SQL_INSERT_INTO_FOLLOW_STATUS,
+                (username, "UNKNOWN", "UNKNOWN", updated_at),
+            )
         cursor.execute(
             SQL_UPDATE_FOLLOW_STATUS,
             (
-                'TRUE' if is_follow_me else 'FALSE',
-                'TRUE' if do_i_follow_him else 'FALSE',
+                "TRUE" if is_follow_me else "FALSE",
+                "TRUE" if do_i_follow_him else "FALSE",
                 updated_at,
-                username
-            )
+                username,
+            ),
         )
         connection.commit()
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot update user's follow-status: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Cannot update user's follow-status: {e}"
+            + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -355,7 +446,11 @@ def get_filtered_user(address, username):
         cursor = connection.cursor()
         filtered_user = _select_filtered_user_by_username(cursor, username)
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot get filtered user {username}: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Cannot get filtered user {username}: {e}"
+            + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -374,7 +469,9 @@ def get_all_filtered_users(address):
         cursor.execute(SQL_SELECT_ALL_FILTERED_USERS)
         filtered_users = cursor.fetchall()
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot get all filtered users: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL + f"[Database] Cannot get all filtered users: {e}" + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -414,7 +511,11 @@ def get_scraped_user(address, username):
         cursor = connection.cursor()
         scraped_user = _select_scraped_user_by_username(cursor, username)
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot get scraped user {username}: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Cannot get scraped user {username}: {e}"
+            + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -433,7 +534,9 @@ def get_all_scraped_users(address):
         cursor.execute(SQL_SELECT_ALL_FILTERED_USERS)
         scraped_users = cursor.fetchall()
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Cannot get all filtered users: {e}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL + f"[Database] Cannot get all filtered users: {e}" + COLOR_ENDC
+        )
     finally:
         if connection:
             # Close the opened connection
@@ -454,8 +557,13 @@ def update_scraped_users(address, usernames, last_interactions, scraping_statuse
 
             scraped_user = _select_scraped_user_by_username(cursor, username)
             if scraped_user is None:
-                cursor.execute(SQL_INSERT_INTO_SCRAPED_USERS, (username, last_interaction))
-            cursor.execute(SQL_UPDATE_SCRAPED_USER, (scraping_status.name, last_interaction, username))
+                cursor.execute(
+                    SQL_INSERT_INTO_SCRAPED_USERS, (username, last_interaction)
+                )
+            cursor.execute(
+                SQL_UPDATE_SCRAPED_USER,
+                (scraping_status.name, last_interaction, username),
+            )
         connection.commit()
     except Exception as e:
         print(COLOR_FAIL + f"[Database] Cannot update scraped users: {e}" + COLOR_ENDC)
@@ -476,13 +584,7 @@ def add_targets(address, usernames, provider, source=None, interaction_type=None
             if user is None:
                 cursor.execute(
                     SQL_INSERT_INTO_INTERACTED_USERS,
-                    (
-                        username,
-                        datetime.now(),
-                        source,
-                        interaction_type,
-                        provider.name
-                    )
+                    (username, datetime.now(), source, interaction_type, provider.name),
                 )
         connection.commit()
     except Exception as e:
@@ -534,7 +636,11 @@ def get_target(address, user_false_validators):
     provider = None
     if target is not None:
         target_username = target["username"]
-        provider = Provider.SCRAPING if target["provider"] == "SCRAPING" else Provider.TARGETS_LIST
+        provider = (
+            Provider.SCRAPING
+            if target["provider"] == "SCRAPING"
+            else Provider.TARGETS_LIST
+        )
     return target_username, provider
 
 
@@ -552,10 +658,14 @@ def count_targets(address):
         cursor.execute(SQL_COUNT_LOADED_TARGETS_FROM_INTERACTED_USERS_BY_TARGETS_LIST)
         total_loaded_targets["targets"] = cursor.fetchone()[0]
         cursor = connection.cursor()
-        cursor.execute(SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_SCRAPE)
+        cursor.execute(
+            SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_SCRAPE
+        )
         not_interacted_targets["scraped"] = cursor.fetchone()[0]
         cursor = connection.cursor()
-        cursor.execute(SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_TARGETS_LIST)
+        cursor.execute(
+            SQL_COUNT_LOADED_NOT_INTERACTED_TARGETS_FROM_INTERACTED_USERS_BY_TARGETS_LIST
+        )
         not_interacted_targets["targets"] = cursor.fetchone()[0]
     except Exception as e:
         print(COLOR_FAIL + f"[Database] Cannot count targets target: {e}" + COLOR_ENDC)
@@ -620,8 +730,10 @@ def _run_migrations(cursor):
         return
 
     if current_version > latest_version:
-        raise Exception(f"[Database] Current DB version (v{current_version}) is newer from your version and "
-                        f"not supported. Please update version.")
+        raise Exception(
+            f"[Database] Current DB version (v{current_version}) is newer from your version and "
+            f"not supported. Please update version."
+        )
 
     if current_version < latest_version:
         print(f"[Database] Going to migrate database to a newer version...")
@@ -634,8 +746,10 @@ def _get_database_version(cursor):
     cursor.execute(SQL_SELECT_MAX_VERSION_FROM_METADATA)
     metadata_row = cursor.fetchone()
     if metadata_row is None:
-        print(COLOR_FAIL + f"[Database] Couldn't find database-version on metadata. "
-                           f"Using database as is (without trying to migrate)." + COLOR_ENDC)
+        print(
+            COLOR_FAIL + f"[Database] Couldn't find database-version on metadata. "
+            f"Using database as is (without trying to migrate)." + COLOR_ENDC
+        )
         return None
     return dict(metadata_row)["MAX(version)"]
 
@@ -665,7 +779,10 @@ def _select_scraped_user_by_username(cursor, username):
 
 
 def _add_session(cursor, session_state):
-    cursor.execute(SQL_INSERT_INTO_PROFILES, (session_state.my_followers_count, session_state.my_following_count))
+    cursor.execute(
+        SQL_INSERT_INTO_PROFILES,
+        (session_state.my_followers_count, session_state.my_following_count),
+    )
     profile_id = cursor.lastrowid
     cursor.execute(
         SQL_INSERT_INTO_SESSIONS,
@@ -683,8 +800,8 @@ def _add_session(cursor, session_state):
             session_state.startTime,
             session_state.finishTime,
             str(session_state.args),
-            profile_id
-        )
+            profile_id,
+        ),
     )
 
 
@@ -695,33 +812,33 @@ def _migrate_db_from_version_1_to_2(cursor):
 
     """
 
-    create_tables(
-        cursor,
-        [
-            "users_follow_status"
-        ]
-    )
+    create_tables(cursor, ["users_follow_status"])
 
 
 def _migrate(curr_version, cursor):
-    print(f"[Database] Going to run database migration from version {curr_version} to {curr_version+1}")
+    print(
+        f"[Database] Going to run database migration from version {curr_version} to {curr_version+1}"
+    )
 
     migration_method = database_migrations[f"{curr_version}->{curr_version + 1}"]
     try:
         migration_method(cursor)
     except Exception as e:
-        print(COLOR_FAIL + f"[Database] Got an error while migrating database from version "
-                           f"{curr_version} to {curr_version + 1}, Error: {str(e)}" + COLOR_ENDC)
+        print(
+            COLOR_FAIL
+            + f"[Database] Got an error while migrating database from version "
+            f"{curr_version} to {curr_version + 1}, Error: {str(e)}" + COLOR_ENDC
+        )
         raise DatabaseMigrationFailedException()
 
-    print(f"[Database] database migration from version {curr_version} to {curr_version+1} has been done successfully")
+    print(
+        f"[Database] database migration from version {curr_version} to {curr_version+1} has been done successfully"
+    )
     print(f"[Database] Updating database version to be {curr_version+1}")
-    cursor.execute(SQL_INSERT_INTO_METADATA, (curr_version+1,))
+    cursor.execute(SQL_INSERT_INTO_METADATA, (curr_version + 1,))
 
 
-database_migrations = {
-    "1->2": _migrate_db_from_version_1_to_2
-}
+database_migrations = {"1->2": _migrate_db_from_version_1_to_2}
 
 
 class DatabaseMigrationFailedException(Exception):

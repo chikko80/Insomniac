@@ -50,7 +50,15 @@ class ActionsRunner(ABC):
 class InsomniacActionsRunner(ActionsRunner, ABC):
     """An interface for extra-actions-runner object"""
 
-    def run(self, device_wrapper, storage, session_state, on_action, is_limit_reached, is_passed_filters=None):
+    def run(
+        self,
+        device_wrapper,
+        storage,
+        session_state,
+        on_action,
+        is_limit_reached,
+        is_passed_filters=None,
+    ):
         raise NotImplementedError()
 
 

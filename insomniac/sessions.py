@@ -4,7 +4,6 @@ FILENAME_SESSIONS = "sessions.json"  # deprecated
 
 
 class Sessions(list):
-
     def persist(self, username):
         """
         Save the sessions list to the database and then clear this list.

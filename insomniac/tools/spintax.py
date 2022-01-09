@@ -11,10 +11,16 @@ def _replace_string(match):
     :return string:
     """
     global spintax_seperator, random_string
-    test_string = re.sub(spintax_seperator, lambda x: x.group(1) + random_string, match.group(2))
+    test_string = re.sub(
+        spintax_seperator, lambda x: x.group(1) + random_string, match.group(2)
+    )
     split_strings = re.split(random_string, test_string)
     random_picked = random.choice(split_strings)
-    return match.group(1) + random_picked + ['', match.group(3)][random_picked == split_strings[-1]]
+    return (
+        match.group(1)
+        + random_picked
+        + ["", match.group(3)][random_picked == split_strings[-1]]
+    )
 
 
 def spin(string, seed=None):
@@ -32,7 +38,7 @@ def spin(string, seed=None):
     # have passed in the universe so it is safe to do.
     characters = [chr(x) for x in range(1234, 1368)]
     global random_string
-    random_string = ''.join(random.sample(characters, 30))
+    random_string = "".join(random.sample(characters, 30))
 
     # If the user has chosen a seed for the random numbers use it
     if seed is not None:
@@ -41,11 +47,11 @@ def spin(string, seed=None):
     # Regex to find spintax seperator, defined here so it is not re-defined
     # on every call to _replace_string function
     global spintax_seperator
-    spintax_seperator = r'((?:(?<!\\)(?:\\\\)*))(\|)'
+    spintax_seperator = r"((?:(?<!\\)(?:\\\\)*))(\|)"
     spintax_seperator = re.compile(spintax_seperator)
 
     # Regex to find all non escaped spintax brackets
-    spintax_bracket = r'(?<!\\)((?:\\{2})*)\{([^}{}]+)(?<!\\)((?:\\{2})*)\}'
+    spintax_bracket = r"(?<!\\)((?:\\{2})*)\{([^}{}]+)(?<!\\)((?:\\{2})*)\}"
     spintax_bracket = re.compile(spintax_bracket)
 
     # Need to iteratively apply the spinning because of nested spintax
@@ -56,8 +62,8 @@ def spin(string, seed=None):
         string = new_string
 
     # Replaces the literal |, {,and }.
-    string = re.sub(r'\\([{}|])', r'\1', string)
+    string = re.sub(r"\\([{}|])", r"\1", string)
     # Removes double \'s
-    string = re.sub(r'\\{2}', r'\\', string)
+    string = re.sub(r"\\{2}", r"\\", string)
 
     return string

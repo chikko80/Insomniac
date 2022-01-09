@@ -49,16 +49,38 @@ def migrate_from_json_to_sql(my_username):
                 for username in interacted_users.keys():
                     usernames.append(username)
                     user = interacted_users[username]
-                    last_interactions.append(datetime.strptime(user[USER_LAST_INTERACTION], '%Y-%m-%d %H:%M:%S.%f'))
-                    following_statuses.append(FollowingStatus[user[USER_FOLLOWING_STATUS].upper()])
+                    last_interactions.append(
+                        datetime.strptime(
+                            user[USER_LAST_INTERACTION], "%Y-%m-%d %H:%M:%S.%f"
+                        )
+                    )
+                    following_statuses.append(
+                        FollowingStatus[user[USER_FOLLOWING_STATUS].upper()]
+                    )
                     sources.append(None)
                     interaction_types.append(None)
                     providers.append(Provider.UNKNOWN)
 
-                update_interacted_users(database, usernames, last_interactions, following_statuses, sources, interaction_types, providers)
-                print(COLOR_BOLD + f"[Migration] Done! You can now delete {FILENAME_INTERACTED_USERS}" + COLOR_ENDC)
+                update_interacted_users(
+                    database,
+                    usernames,
+                    last_interactions,
+                    following_statuses,
+                    sources,
+                    interaction_types,
+                    providers,
+                )
+                print(
+                    COLOR_BOLD
+                    + f"[Migration] Done! You can now delete {FILENAME_INTERACTED_USERS}"
+                    + COLOR_ENDC
+                )
         except ValueError as e:
-            print(COLOR_FAIL + f"[Migration] Cannot load {FILENAME_INTERACTED_USERS}: {e}" + COLOR_ENDC)
+            print(
+                COLOR_FAIL
+                + f"[Migration] Cannot load {FILENAME_INTERACTED_USERS}: {e}"
+                + COLOR_ENDC
+            )
 
     scrapped_users_path = os.path.join(my_username, FILENAME_SCRAPPED_USERS)
     if os.path.exists(scrapped_users_path):
@@ -75,13 +97,29 @@ def migrate_from_json_to_sql(my_username):
                 for username in scrapped_users.keys():
                     usernames.append(username)
                     user = scrapped_users[username]
-                    last_interactions.append(datetime.strptime(user[USER_LAST_INTERACTION], '%Y-%m-%d %H:%M:%S.%f'))
-                    scraping_statuses.append(ScrappingStatus[user[USER_SCRAPPING_STATUS].upper()])
+                    last_interactions.append(
+                        datetime.strptime(
+                            user[USER_LAST_INTERACTION], "%Y-%m-%d %H:%M:%S.%f"
+                        )
+                    )
+                    scraping_statuses.append(
+                        ScrappingStatus[user[USER_SCRAPPING_STATUS].upper()]
+                    )
 
-                update_scraped_users(database, usernames, last_interactions, scraping_statuses)
-                print(COLOR_BOLD + f"[Migration] Done! You can now delete {FILENAME_SCRAPPED_USERS}" + COLOR_ENDC)
+                update_scraped_users(
+                    database, usernames, last_interactions, scraping_statuses
+                )
+                print(
+                    COLOR_BOLD
+                    + f"[Migration] Done! You can now delete {FILENAME_SCRAPPED_USERS}"
+                    + COLOR_ENDC
+                )
         except ValueError as e:
-            print(COLOR_FAIL + f"[Migration] Cannot load {FILENAME_SCRAPPED_USERS}: {e}" + COLOR_ENDC)
+            print(
+                COLOR_FAIL
+                + f"[Migration] Cannot load {FILENAME_SCRAPPED_USERS}: {e}"
+                + COLOR_ENDC
+            )
 
     filtered_users_path = os.path.join(my_username, FILENAME_FILTERED_USERS)
     if os.path.exists(filtered_users_path):
@@ -97,12 +135,24 @@ def migrate_from_json_to_sql(my_username):
                 for username in filtered_users.keys():
                     usernames.append(username)
                     user = filtered_users[username]
-                    filtered_at_list.append(datetime.strptime(user[USER_FILTERED_AT], '%Y-%m-%d %H:%M:%S.%f'))
+                    filtered_at_list.append(
+                        datetime.strptime(
+                            user[USER_FILTERED_AT], "%Y-%m-%d %H:%M:%S.%f"
+                        )
+                    )
 
                 update_filtered_users(database, usernames, filtered_at_list)
-                print(COLOR_BOLD + f"[Migration] Done! You can now delete {FILENAME_FILTERED_USERS}" + COLOR_ENDC)
+                print(
+                    COLOR_BOLD
+                    + f"[Migration] Done! You can now delete {FILENAME_FILTERED_USERS}"
+                    + COLOR_ENDC
+                )
         except ValueError as e:
-            print(COLOR_FAIL + f"[Migration] Cannot load {FILENAME_FILTERED_USERS}: {e}" + COLOR_ENDC)
+            print(
+                COLOR_FAIL
+                + f"[Migration] Cannot load {FILENAME_FILTERED_USERS}: {e}"
+                + COLOR_ENDC
+            )
 
     sessions_path = os.path.join(my_username, FILENAME_SESSIONS)
     if os.path.exists(sessions_path):
@@ -120,29 +170,55 @@ def migrate_from_json_to_sql(my_username):
                     session_state.args = str(session["args"])
                     session_state.app_version = session.get("app_version", "")
                     session_state.my_username = my_username
-                    session_state.my_followers_count = session["profile"].get("followers", 0)
-                    session_state.my_following_count = session["profile"].get("following", 0)
-                    session_state.totalInteractions = {None: session["total_interactions"]}
-                    session_state.successfulInteractions = {None: session["successful_interactions"]}
+                    session_state.my_followers_count = session["profile"].get(
+                        "followers", 0
+                    )
+                    session_state.my_following_count = session["profile"].get(
+                        "following", 0
+                    )
+                    session_state.totalInteractions = {
+                        None: session["total_interactions"]
+                    }
+                    session_state.successfulInteractions = {
+                        None: session["successful_interactions"]
+                    }
                     session_state.totalFollowed = {None: session["total_followed"]}
                     session_state.totalScraped = session.get("total_scraped", {})
                     session_state.totalLikes = session["total_likes"]
                     session_state.totalGetProfile = session.get("total_get_profile", 0)
                     session_state.totalUnfollowed = session.get("total_unfollowed", 0)
-                    session_state.totalStoriesWatched = session.get("total_stories_watched", 0)
+                    session_state.totalStoriesWatched = session.get(
+                        "total_stories_watched", 0
+                    )
                     if "removed_mass_followers" in session:
-                        session_state.removedMassFollowers = session["removed_mass_followers"]
+                        session_state.removedMassFollowers = session[
+                            "removed_mass_followers"
+                        ]
                     if "total_removed_mass_followers" in session:
-                        session_state.removedMassFollowers = session["total_removed_mass_followers"]
-                    session_state.startTime = datetime.strptime(session["start_time"], '%Y-%m-%d %H:%M:%S.%f')
+                        session_state.removedMassFollowers = session[
+                            "total_removed_mass_followers"
+                        ]
+                    session_state.startTime = datetime.strptime(
+                        session["start_time"], "%Y-%m-%d %H:%M:%S.%f"
+                    )
                     if session.get("finish_time") != "None":
-                        session_state.finishTime = datetime.strptime(session["finish_time"], '%Y-%m-%d %H:%M:%S.%f')
+                        session_state.finishTime = datetime.strptime(
+                            session["finish_time"], "%Y-%m-%d %H:%M:%S.%f"
+                        )
 
                     sessions_persistent_list.append(session_state)
                 sessions_persistent_list.persist(my_username)
-                print(COLOR_BOLD + f"[Migration] Done! You can now delete {FILENAME_SESSIONS}" + COLOR_ENDC)
+                print(
+                    COLOR_BOLD
+                    + f"[Migration] Done! You can now delete {FILENAME_SESSIONS}"
+                    + COLOR_ENDC
+                )
         except ValueError as e:
-            print(COLOR_FAIL + f"[Migration] Cannot load {FILENAME_SESSIONS}: {e}" + COLOR_ENDC)
+            print(
+                COLOR_FAIL
+                + f"[Migration] Cannot load {FILENAME_SESSIONS}: {e}"
+                + COLOR_ENDC
+            )
 
 
 def migrate_from_sql_to_peewee(my_username):
@@ -171,20 +247,41 @@ def migrate_from_sql_to_peewee(my_username):
             ProfileStatus.VALID.value,
             session["followers"],
             session["following"],
-            datetime.strptime(session["start_time"], '%Y-%m-%d %H:%M:%S.%f') if session["start_time"] is not None else datetime.now(),
-            datetime.strptime(session["finish_time"], '%Y-%m-%d %H:%M:%S.%f') if session["finish_time"] is not None else None
+            datetime.strptime(session["start_time"], "%Y-%m-%d %H:%M:%S.%f")
+            if session["start_time"] is not None
+            else datetime.now(),
+            datetime.strptime(session["finish_time"], "%Y-%m-%d %H:%M:%S.%f")
+            if session["finish_time"] is not None
+            else None,
         )
 
-    session_id = my_profile.start_session(None, "Unknown app version: migration", "Unknown args: migration", ProfileStatus.VALID.value, -1, -1)
+    session_id = my_profile.start_session(
+        None,
+        "Unknown app version: migration",
+        "Unknown args: migration",
+        ProfileStatus.VALID.value,
+        -1,
+        -1,
+    )
     print(f"[Migration] Migrating interacted users to the {DATABASE_NAME}...")
     for interacted_user in get_all_interacted_users(database):
-        my_profile.log_like_action(session_id, SessionPhase.TASK_LOGIC.value, interacted_user["username"], None, None)
+        my_profile.log_like_action(
+            session_id,
+            SessionPhase.TASK_LOGIC.value,
+            interacted_user["username"],
+            None,
+            None,
+        )
     print(f"[Migration] Migrating filtered users to the {DATABASE_NAME}...")
     for filtered_user in get_all_filtered_users(database):
-        my_profile.log_filter_action(session_id, SessionPhase.TASK_LOGIC.value, filtered_user["username"])
+        my_profile.log_filter_action(
+            session_id, SessionPhase.TASK_LOGIC.value, filtered_user["username"]
+        )
     print(f"[Migration] Migrating scraped users to the {DATABASE_NAME}...")
     for scraped_user in get_all_scraped_users(database):
         my_profile.publish_scrapped_account(scraped_user["username"], [my_username])
     my_profile.end_session(session_id)
 
-    print(COLOR_BOLD + f"[Migration] Done! Now you can now delete {database}" + COLOR_ENDC)
+    print(
+        COLOR_BOLD + f"[Migration] Done! Now you can now delete {database}" + COLOR_ENDC
+    )

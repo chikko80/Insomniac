@@ -10,3 +10,5 @@ filter.json
 *.log
 screen_records
 insomniac.db
+config.json
+.vscode

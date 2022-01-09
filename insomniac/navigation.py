@@ -1,7 +1,13 @@
 from insomniac.utils import *
-from insomniac.views import TabBarView, ProfileView, TabBarTabs, LanguageNotEnglishException, DialogView
+from insomniac.views import (
+    TabBarView,
+    ProfileView,
+    TabBarTabs,
+    LanguageNotEnglishException,
+    DialogView,
+)
 
-SEARCH_CONTENT_DESC_REGEX = '[Ss]earch and [Ee]xplore'
+SEARCH_CONTENT_DESC_REGEX = "[Ss]earch and [Ee]xplore"
 
 
 def navigate(device, tab, switch_to_english_on_exception=True):
@@ -34,10 +40,7 @@ def search_for(device, username=None, hashtag=None, place=None, on_action=None):
 def switch_to_english(device):
     print(COLOR_OKGREEN + "Switching to English locale" + COLOR_ENDC)
     navigate(device, TabBarTabs.PROFILE, switch_to_english_on_exception=False)
-    ProfileView(device) \
-        .navigate_to_options() \
-        .navigate_to_settings() \
-        .switch_to_english()
+    ProfileView(device).navigate_to_options().navigate_to_settings().switch_to_english()
 
 
 def close_instagram_and_system_dialogs(device):

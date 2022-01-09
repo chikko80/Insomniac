@@ -166,24 +166,24 @@ def handle_target(
 
         is_private = is_private_account(device)
         if is_private:
-            if is_passed_filters is None:
-                print(
-                    COLOR_OKGREEN
-                    + "@"
-                    + target_name
-                    + " has private account, won't interact."
-                    + COLOR_ENDC
-                )
-                on_action(
-                    InteractAction(
-                        source_name=target,
-                        source_type=source_type,
-                        user=target_name,
-                        succeed=False,
-                    )
-                )
-                print("Moving to next target")
-                return
+            # if is_passed_filters is None:
+            #     print(
+            #         COLOR_OKGREEN
+            #         + "@"
+            #         + target_name
+            #         + " has private account, won't interact."
+            #         + COLOR_ENDC
+            #     )
+            #     on_action(
+            #         InteractAction(
+            #             source_name=target,
+            #             source_type=source_type,
+            #             user=target_name,
+            #             succeed=False,
+            #         )
+            #     )
+            #     print("Moving to next target")
+            #     return
             print("@" + target_name + ": Private account - images wont be liked.")
 
         do_have_stories = do_have_story(device)

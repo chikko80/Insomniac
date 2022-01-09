@@ -255,26 +255,13 @@ def handle_blogger(
         is_private = follower_profile_view.is_private_account()
         if is_private:
             # ? disable ignoring private
-            if is_passed_filters is None:
-                print(
-                    COLOR_OKGREEN
-                    + "@"
-                    + follower_name
-                    + " has private account, won't interact."
-                    + COLOR_ENDC
-                )
-                on_action(FilterAction(user=follower_name))
-                on_action(
-                    InteractAction(
-                        source_name=username,
-                        source_type=source_type,
-                        user=follower_name,
-                        succeed=False,
-                    )
-                )
-                print("Back to profiles list")
-                device.back()
-                return True
+            # if is_passed_filters is None:
+                # print( COLOR_OKGREEN + "@" + follower_name + " has private account, won't interact." + COLOR_ENDC)
+                # on_action(FilterAction(user=follower_name))
+                # on_action( InteractAction( source_name=username, source_type=source_type, user=follower_name, succeed=False,))
+                # print("Back to profiles list")
+                # device.back()
+                # return True
             print("@" + follower_name + ": Private account - images wont be liked.")
 
         do_have_stories = follower_profile_view.is_story_available()
@@ -361,17 +348,9 @@ def handle_blogger(
 
         if (
             ((is_like_limit_reached and is_likes_enabled) or not is_likes_enabled)
-            and (
-                (is_follow_limit_reached and is_follow_enabled) or not is_follow_enabled
-            )
-            and (
-                (is_comment_limit_reached and is_comment_enabled)
-                or not is_comment_enabled
-            )
-            and (
-                (is_watch_limit_reached and is_stories_enabled)
-                or not is_stories_enabled
-            )
+            and ( (is_follow_limit_reached and is_follow_enabled) or not is_follow_enabled)
+            and ( (is_comment_limit_reached and is_comment_enabled) or not is_comment_enabled)
+            and ( (is_watch_limit_reached and is_stories_enabled) or not is_stories_enabled)
         ):
             # If one of the limits reached for source-limit, move to next source
             if (

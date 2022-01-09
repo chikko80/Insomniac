@@ -247,26 +247,20 @@ def handle_place(
 
         is_private = is_private_account(device)
         if is_private:
-            if is_passed_filters is None:
-                print(
-                    COLOR_OKGREEN
-                    + "@"
-                    + liker_username
-                    + " has private account, won't interact."
-                    + COLOR_ENDC
-                )
-                on_action(FilterAction(liker_username))
-                on_action(
-                    InteractAction(
-                        source_name=place,
-                        source_type=source_type,
-                        user=liker_username,
-                        succeed=False,
-                    )
-                )
-                print("Back to likers list")
-                device.back()
-                return True
+            # if is_passed_filters is None:
+                # print( COLOR_OKGREEN + "@" + liker_username + " has private account, won't interact." + COLOR_ENDC)
+                # on_action(FilterAction(liker_username))
+                # on_action(
+                #     InteractAction(
+                #         source_name=place,
+                #         source_type=source_type,
+                #         user=liker_username,
+                #         succeed=False,
+                #     )
+                # )
+                # print("Back to likers list")
+                # device.back()
+                # return True
             print("@" + liker_username + ": Private account - images wont be liked.")
 
         do_have_stories = do_have_story(device)
